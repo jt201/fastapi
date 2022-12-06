@@ -1,8 +1,9 @@
 from dataclasses import dataclass
 from datetime import datetime
-from fastapi import APIRouter, Request
-from fastapi.responses import HTMLResponse
-from typing import List
+from typing import List, Optional
+
+from fastapi import APIRouter, Request, Form
+from fastapi.responses import HTMLResponse, RedirectResponse, Response
 
 from . import templates
 
@@ -18,24 +19,45 @@ class TodoItem:
     created: datetime
 
 
-data: List[TodoItem] = [
-    TodoItem(
-        id=1,
-        content="Todo List Item",
-        author="201",
-        status=False,
-        created=datetime.fromisoformat("2022-01-01 00:00:00"),
-    ),
-    TodoItem(
-        id=1,
-        content="OLD Todo List Item",
-        author="201",
-        status=True,
-        created=datetime.fromisoformat("2021-12-31 13:50:00"),
-    ),
-]
+data: List[TodoItem] = []
 
 
 @router.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request, "data": data})
+    result: List[TodoItem] = data[::-1]
+    return templates.TemplateResponse("index.html", {"request": request, "data": result})
+
+
+@router.post("/")
+async def create_item(content: str = Form(default="")):
+    if not content:
+        return Response(
+            content="""
+                <script>
+                    alert('내용을 입력해주세요!!');
+                    history.back();
+                </script>
+            """,
+            media_type="text/html;charset=utf-8",
+        )
+    if content in [item.content for item in data]:
+        return Response(
+            content="""
+                <script>
+                    alert('이미 등록된 데이터 입니다!!');
+                    history.back();
+                </script>
+            """,
+            media_type="text/html;charset=utf-8",
+        )
+
+    data.append(
+        TodoItem(
+            id=(max([item.id for item in data]) + 1 if len(data) > 0 else 0),
+            content=content,
+            author="201",
+            status=False,
+            created=datetime.now(),
+        )
+    )
+    return RedirectResponse("/", status_code=302)

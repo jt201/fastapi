@@ -3,20 +3,22 @@
 {% block content %}
 <div class="container my-3">
     <div class="row justify-content-between my-3">
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" value="" id="input_todo" />
+        <form method="post" class="input-group mb-3">
+            <input type="text" class="form-control" name="content" value="" id="input_todo" autofocus />
 
             <div class="input-group-append">
-                <button class="btn btn-primary" type="button" id="btn_add">등록</button>
+                <button class="btn btn-primary" id="btn_add">등록</button>
             </div>
-        </div>
+        </form>
     </div>
 
+    <!--
     <div class="d-flex justify-content-center">
         <div class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
+    -->
 
     <table class="table table-striped">
         <thead>
