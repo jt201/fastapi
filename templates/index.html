@@ -56,9 +56,9 @@
         </tbody>
     </table>
 
-    {% if pages|length > 0 %}
-        <!-- 페이징처리 시작 -->
-        <ul class="pagination justify-content-center">
+    <!-- 페이징처리 시작 -->
+    <ul class="pagination justify-content-center">
+        {% if pages|length > 0 %}
             <!-- 이전페이지 -->
             {% if page > 1 and total > 0 %}
                 <li class="page-item">
@@ -104,8 +104,8 @@
                     <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
                 </li>
             {% endif %}
-        </ul>
-        <!-- 페이징처리 끝 -->
-    {% endif %}
+        {% endif %}
+    </ul>
+    <!-- 페이징처리 끝 -->
 </div>
 {% endblock %}
