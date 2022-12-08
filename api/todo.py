@@ -2,7 +2,7 @@ from fastapi import APIRouter, Body, HTTPException
 
 from main import data, TodoItem
 
-router = APIRouter(prefix="/todo")
+router = APIRouter(prefix="/todo", tags=["TODO"])
 
 
 @router.post("/", response_model=bool)
