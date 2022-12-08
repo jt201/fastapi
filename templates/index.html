@@ -29,7 +29,7 @@
                         <td class="text-center">{{data|length - loop.index + 1}}</td>
                         <td class="text-left">
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault-0" {{'checked' if item.status==True}} />
+                                <input class="form-check-input todo-toggle-item" type="checkbox" role="switch" id="flexSwitchCheckDefault-0" data-id="{{item.id}}" {{'checked' if item.status==True}} />
                                 <label class="form-check-label" for="flexSwitchCheckDefault-0">{{item.content}}</label>
                             </div>
                         </td>
@@ -141,6 +141,20 @@
             });
 
             return false;
+        });
+
+        $(".todo-toggle-item").on("click", function (e) {
+            var id = $(this).data("id");
+
+            $.ajax({
+                url: `/api/todo/${id}`,
+                type: "put",
+                success: function (res) {
+                    if (res !== true) {
+                        alert(res?.detail || "Error");
+                    }
+                }
+            });
         });
 
         // DELETE

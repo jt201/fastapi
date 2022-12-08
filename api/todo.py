@@ -19,6 +19,20 @@ def todo_create_item(content: str = Body(embed=True)) -> bool:
     return new_item in data
 
 
+@router.put("/{todo_id}", response_model=bool)
+def todo_toggle_status_item(todo_id: int) -> bool:
+    ids: list[int] = [item.id for item in data]
+
+    if not todo_id in ids:
+        raise HTTPException(200, detail="아이템을 찾을 수 없습니다!!")
+
+    idx: int = ids.index(todo_id)
+
+    data[idx].status = not data[idx].status
+
+    return True
+
+
 @router.delete("/{todo_id}", response_model=bool)
 def todo_remove_item(todo_id: int) -> bool:
     ids: list[int] = [item.id for item in data]
