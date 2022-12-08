@@ -73,29 +73,16 @@
                 </li>
             {% endif %}
 
-            {% if pages|min > 1 %}
-                <li class="page-item" aria-current="page">
-                    <a class="page-link" href="?page=1">1</a>
-                </li>
+            {% for item in pages %}
+                {% if loop.index > 1 and item != pages[loop.index - 2] + 1 %}
                 <li class="disabled">
                     <a class="page-link" href="#">...</a>
                 </li>
-            {% endif %}
-
-            {% for item in pages %}
+                {% endif %}
                 <li class="page-item {{'active' if item == page else ''}}" aria-current="page">
                     <a class="page-link" href="?page={{item}}">{{item}}</a>
                 </li>
             {% endfor %}
-
-            {% if pages|max < total_pages %}
-                <li class="disabled">
-                    <a class="page-link" href="#">...</a>
-                </li>
-                <li class="page-item" aria-current="page">
-                    <a class="page-link" href="?page={{total_pages}}">{{total_pages}}</a>
-                </li>
-            {% endif %}
 
             <!-- 다음페이지 -->
             {% if total > 0 and total_pages > page %}
@@ -132,7 +119,7 @@
                 success: function (res) {
                     if (res === true) {
                         alert("등록되었습니다");
-                        location.reload();
+                        location.href = "/";
                         return;
                     }
 

@@ -13,6 +13,12 @@ router = APIRouter()
 
 
 def get_pagination(total: int = 0, current: int = 1, length: int = 5) -> List[int]:
+    """
+    페이지네이션 구하기
+    :param total: 전체 페이지 갯수
+    :param current: 현재 페이지
+    :param length: 표시할 페이지네이션 갯수
+    """
     # 가운데 표시 페이지 갯수 구하기
     calc_length: int = ((length - 1 if length % 2 == 0 else length) if length >= 5 else 5) - 2
 
@@ -44,13 +50,19 @@ def get_pagination(total: int = 0, current: int = 1, length: int = 5) -> List[in
         elif max(page) == total - 1:
             page.append(total)
 
+    if total > 0:
+        if len(page) < length and min(page) > 1:
+            page.insert(0, 1)
+        if len(page) < length and max(page) < total:
+            page.append(total)
+
     return page
 
 
 @router.get("/", response_class=HTMLResponse)
 async def index(request: Request, page: int = 1):
     page: int = max(page, 1)
-    rpp: int = 5
+    rpp: int = 1
     start: int = (page - 1) * rpp
     end: int = start + rpp
     result: List[TodoItem] = data[::-1][start:end]
