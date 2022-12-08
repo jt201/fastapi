@@ -29,5 +29,5 @@ app = FastAPI()
 
 app.mount("/assets", StaticFiles(directory="assets"), name="assets")
 
-app.include_router(router)
+app.include_router(router, include_in_schema=False)
 app.include_router(apiRouter)
