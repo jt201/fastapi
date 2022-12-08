@@ -126,7 +126,7 @@
                 method: "DELETE",
                 success: function (res) {
                     if (res === true) {
-                        location.href = "/";
+                        location.reload();
                     } else {
                         alert("Can't Remove Item");
                     }
