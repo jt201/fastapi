@@ -36,7 +36,7 @@
                         <td class="text-center">{{item.author}}</td> <!-- 글쓴이 추가 -->
                         <td class="text-center">{{item.created.strftime("%Y-%m-%d %H:%M")}}</td>
                         <td class="text-center">
-                            <button type="button" class="btn btn-sm btn-danger">삭제</button>
+                            <button type="button" class="btn btn-sm btn-danger todo-remove-item" data-id="{{item.id}}">삭제</button>
                         </td>
                     </tr>
                 {% endfor %}
@@ -111,4 +111,33 @@
     </ul>
     <!-- 페이징처리 끝 -->
 </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    jQuery(function ($) {
+        $(".todo-remove-item").on("click", function (e) {
+            e.preventDefault();
+
+            var id = $(this).data("id");
+
+            $.ajax({
+                url: `/api/todo/${id}`,
+                method: "DELETE",
+                success: function (res) {
+                    if (res === true) {
+                        location.href = "/";
+                    } else {
+                        alert("Can't Remove Item");
+                    }
+                },
+                error: function (err) {
+                    console.log("Error", err);
+                }
+            });
+
+            return false;
+        });
+    });
+</script>
 {% endblock %}

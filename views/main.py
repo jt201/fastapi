@@ -6,21 +6,10 @@ from math import ceil
 from fastapi import APIRouter, Request, Form
 from fastapi.responses import HTMLResponse, RedirectResponse, Response
 
+from main import data, TodoItem
 from . import templates
 
 router = APIRouter()
-
-
-@dataclass
-class TodoItem:
-    id: int
-    content: str
-    author: str
-    status: bool
-    created: datetime
-
-
-data: List[TodoItem] = []
 
 
 def get_pagination(total: int = 0, current: int = 1, length: int = 5) -> List[int]:
