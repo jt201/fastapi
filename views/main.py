@@ -62,7 +62,7 @@ def get_pagination(total: int = 0, current: int = 1, length: int = 5) -> List[in
 @router.get("/", response_class=HTMLResponse)
 async def index(request: Request, page: int = 1):
     page: int = max(page, 1)
-    rpp: int = 1
+    rpp: int = 5
     start: int = (page - 1) * rpp
     end: int = start + rpp
     result: List[TodoItem] = data[::-1][start:end]
