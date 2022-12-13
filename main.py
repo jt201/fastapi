@@ -1,11 +1,8 @@
 from datetime import datetime
-from typing import List
+from typing import List, Dict
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Cookie
 from fastapi.staticfiles import StaticFiles
-
-data: List["TodoItem"] = []
-users: List["User"] = []
 
 
 class TodoItem:
@@ -34,6 +31,18 @@ class User:
         self.name = name
         self.email = email
         self.password = password
+
+
+data: List[TodoItem] = []
+users: List[User] = []
+sessions: Dict[str, User] = {}
+
+
+def with_auth(todo_session_id: str = Cookie("")) -> User | None:
+    print(todo_session_id, sessions, todo_session_id in sessions)
+    if todo_session_id and todo_session_id in sessions.keys():
+        return sessions[todo_session_id]
+    return None
 
 
 from views import router

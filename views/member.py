@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Request, Form
-from fastapi.responses import HTMLResponse
+from uuid import uuid4
+from fastapi import APIRouter, Request, Form, Depends, Response
+from fastapi.responses import HTMLResponse, RedirectResponse
 
 from . import templates
-from main import users, User
+from main import users, User, sessions, with_auth
 
 router = APIRouter(prefix="/member")
 
@@ -10,6 +11,38 @@ router = APIRouter(prefix="/member")
 @router.get("/login", response_class=HTMLResponse)
 async def member_login(request: Request):
     return templates.TemplateResponse("member/login.html", {"request": request})
+
+
+@router.post("/login", response_class=HTMLResponse | RedirectResponse)
+async def member_login_proc(
+    response: Response,
+    email: str = Form(""),
+    password: str = Form(""),
+    user: User = Depends(with_auth),
+):
+    if user is not None:
+        return RedirectResponse("/", status_code=303)
+
+    find_users = [user for user in users if user.email == email and user.password == password]
+
+    if find_users:
+        session_id = str(uuid4())
+        user = find_users[0]
+
+        sessions[session_id] = user
+        response = RedirectResponse("/", status_code=303)
+        response.set_cookie(key="todo_session_id", value=session_id, httponly=True)
+
+        return response
+
+    return HTMLResponse(
+        content="""
+            <script>
+                alert("해당 사용자를 찾을 수 없습니다!!");
+                history.back();
+            </script>
+        """,
+    )
 
 
 @router.get("/register", response_class=HTMLResponse)

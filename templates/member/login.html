@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
     <h5 class="my-3 border-bottom pb-2">로그인</h5>
-    <form method="post">
+    <form action="/member/login" method="post">
         <div class="mb-3">
             <label for="email">이메일</label>
             <input type="text" class="form-control" name="email" id="email" value="" />
@@ -13,6 +13,7 @@
             <input type="password" class="form-control" name="password" id="password" value="" />
         </div>
         <button type="submit" class="btn btn-primary">로그인</button>
+        <a href="/member/register/" class="btn btn-light">계정생성</a>
     </form>
 </div>
 {% endblock %}

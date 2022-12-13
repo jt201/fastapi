@@ -3,10 +3,10 @@ from datetime import datetime
 from typing import List, Optional
 from math import ceil
 
-from fastapi import APIRouter, Request, Form
+from fastapi import APIRouter, Request, Form, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse, Response
 
-from main import data, TodoItem
+from main import data, TodoItem, with_auth, User
 from . import templates
 
 router = APIRouter()
@@ -59,8 +59,11 @@ def get_pagination(total: int = 0, current: int = 1, length: int = 5) -> List[in
     return page
 
 
-@router.get("/", response_class=HTMLResponse)
-async def index(request: Request, page: int = 1):
+@router.get("/", response_class=HTMLResponse, dependencies=[Depends(with_auth)])
+async def index(request: Request, page: int = 1, user: User | None = Depends(with_auth)):
+    if user is None:
+        return RedirectResponse("/member/login")
+
     page: int = max(page, 1)
     rpp: int = 5
     start: int = (page - 1) * rpp
