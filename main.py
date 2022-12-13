@@ -39,7 +39,6 @@ sessions: Dict[str, User] = {}
 
 
 def with_auth(todo_session_id: str = Cookie("")) -> User | None:
-    print(todo_session_id, sessions, todo_session_id in sessions)
     if todo_session_id and todo_session_id in sessions.keys():
         return sessions[todo_session_id]
     return None
