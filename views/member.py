@@ -1,11 +1,22 @@
 from uuid import uuid4
-from fastapi import APIRouter, Request, Form, Depends, Response
+from fastapi import APIRouter, Request, Form, Depends, Cookie
 from fastapi.responses import HTMLResponse, RedirectResponse
 
 from . import templates
 from main import users, User, sessions, with_auth
 
 router = APIRouter(prefix="/member")
+
+
+@router.get("/logout")
+async def member_logout(todo_session_id: str = Cookie("")):
+    if todo_session_id and todo_session_id in sessions.keys():
+        del sessions[todo_session_id]
+
+    response = RedirectResponse("/", status_code=303)
+    response.delete_cookie(key="todo_session_id")
+
+    return response
 
 
 @router.get("/login", response_class=HTMLResponse)
@@ -15,7 +26,6 @@ async def member_login(request: Request):
 
 @router.post("/login", response_class=HTMLResponse | RedirectResponse)
 async def member_login_proc(
-    response: Response,
     email: str = Form(""),
     password: str = Form(""),
     user: User = Depends(with_auth),
