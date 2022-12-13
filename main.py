@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
 data: List["TodoItem"] = []
+users: List["User"] = []
 
 
 class TodoItem:
@@ -20,6 +21,19 @@ class TodoItem:
         self.author = "201"
         self.status = False
         self.created = datetime.now()
+
+
+class User:
+    id: int
+    name: str
+    email: str
+    password: str
+
+    def __init__(self, name: str, email: str, password: str):
+        self.id = 1 if len(users) == 0 else max([item.id for item in users])
+        self.name = name
+        self.email = email
+        self.password = password
 
 
 from views import router
