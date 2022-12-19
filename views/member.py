@@ -4,7 +4,8 @@ from fastapi import APIRouter, Request, Form, Depends, Cookie
 from fastapi.responses import HTMLResponse, RedirectResponse
 
 from . import templates
-from main import users, User, sessions, with_auth
+from data import users, User, sessions, with_auth
+
 
 router = APIRouter(prefix="/member")
 

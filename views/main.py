@@ -6,7 +6,7 @@ from math import ceil
 from fastapi import APIRouter, Request, Form, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse, Response
 
-from main import data, TodoItem, with_auth, User
+from data import data, TodoItem, User, with_auth
 from . import templates
 
 router = APIRouter()
