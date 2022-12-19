@@ -1,3 +1,4 @@
+from typing import Union
 from uuid import uuid4
 from fastapi import APIRouter, Request, Form, Depends, Cookie
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -24,7 +25,7 @@ async def member_login(request: Request):
     return templates.TemplateResponse("member/login.html", {"request": request})
 
 
-@router.post("/login", response_class=HTMLResponse | RedirectResponse)
+@router.post("/login", response_class=Union[HTMLResponse, RedirectResponse])
 async def member_login_proc(
     email: str = Form(""),
     password: str = Form(""),

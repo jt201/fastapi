@@ -60,7 +60,7 @@ def get_pagination(total: int = 0, current: int = 1, length: int = 5) -> List[in
 
 
 @router.get("/", response_class=HTMLResponse, dependencies=[Depends(with_auth)])
-async def index(request: Request, page: int = 1, user: User | None = Depends(with_auth)):
+async def index(request: Request, page: int = 1, user: Optional[User] = Depends(with_auth)):
     if user is None:
         return RedirectResponse("/member/login")
 
