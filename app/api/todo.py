@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Body, HTTPException
 
-from main import data, TodoItem
+from app.data import data, TodoItem
 
 router = APIRouter(prefix="/todo", tags=["TODO"])
 
